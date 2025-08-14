@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
-
+import { Component, signal, output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { InvestmentInput } from '../app/investment-input-model';
 @Component({
   selector: 'app-user-input',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './user-input.component.html',
-  styleUrl: './user-input.component.css'
+  styleUrl: './user-input.component.css',
 })
 export class UserInputComponent {
-
+ calculate = output<InvestmentInput>();
+  initialInvestment = signal('0');
+  expectedReturn = signal('0');
+  annualInvestment = signal('5');
+  duration = signal('10');
+  onSubmit() {
+    this.calculate.emit({
+      initialInvestment: +this.initialInvestment(),
+      duration: +this.duration(),
+      expectedReturn: +this.expectedReturn(),
+      annualInvestment: +this.annualInvestment(),
+    });
+    this.initialInvestment.set('0')
+    this.annualInvestment.set('0')
+    this.expectedReturn.set('0')
+    this.duration.set('0')
+  }
 }
